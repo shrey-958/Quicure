@@ -107,6 +107,30 @@ exports.updateUsersbyId = (req,res,next) =>{
             );
 };
 
+exports.updateDoctor = (req,res,next) =>{
+    const id = req.params.id;
+    const body = req.body;
+    allUsers.updateDoctor(body,id)
+    .then(
+     res.status(200).json({
+         success:1,
+        
+         message:"Data updated successfully"
+     })
+    
+    
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};
+
 exports.login = (req,res,next) =>{
     const body = req.body;
     allUsers.login(body)
