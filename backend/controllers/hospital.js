@@ -60,7 +60,7 @@ exports.getHospitalById = (req,res,next)=>{
 exports.bookHospitalBed = (req,res,next)=>{
 
     const data = req.body;
-    const hospid = re.params.hospid;
+    const hospid = req.params.hospid;
 
     allHospitals.bookHospitalBed(data,hospid)
     .then(result => {
