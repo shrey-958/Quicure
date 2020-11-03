@@ -1,12 +1,9 @@
-const allUsers = require('../models/user.js');
-const { sign } = require("jsonwebtoken");
-const { genSaltSync,hashSync, compareSync } = require('bcrypt');
+const allDoctors = require('../models/doctor.js');
 
-exports.postUsers = (req,res,next) =>{
+exports.postAppointment = (req,res,next) =>{
     const body = req.body;
-    const salt = genSaltSync(10);
-    body.password = hashSync(body.password, salt);
-    allUsers.insertUsers(body)
+    
+    allDoctors.insertAppointment(body)
 
     .then(
         
@@ -26,9 +23,34 @@ exports.postUsers = (req,res,next) =>{
             );
 };
 
-exports.getUsers = (req,res,next) =>{
+exports.updateAppointmentById = (req,res,next) =>{
+    const id = req.params.id;
+    const body = req.body;
+    allDoctors.updateAppointment(body,id)
+    .then(
+     res.status(200).json({
+         success:1,
+        
+         message:"Data updated successfully"
+     })
     
-    allUsers.fetchUsers()
+    
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};
+
+
+exports.getAllDoctors = (req,res,next) =>{
+    
+    allDoctors.fetchDoctor()
     .then(result => {
         
      res.status(200).json({
@@ -48,9 +70,9 @@ exports.getUsers = (req,res,next) =>{
             );
 };
 
-exports.getUsersbyId = (req,res,next) =>{
+exports.getDoctorById = (req,res,next) =>{
     const id = req.params.id;
-    allUsers.fetchUsersbyId(id)
+    allDoctors.fetchDoctorById(id)
     .then(result => {
      if(result[0].length != 0)
      {
@@ -83,18 +105,53 @@ exports.getUsersbyId = (req,res,next) =>{
             );
 };
 
-exports.updateUsersbyId = (req,res,next) =>{
+
+exports.getPrivateDoctors = (req,res,next) =>{
+    
+    allDoctors.fetchPrivateDoctors()
+    .then(result => {
+        
+     res.status(200).json({
+         success:1,
+         message:result[0]
+     });   
+    }
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};
+
+
+exports.getPrivateDoctorById = (req,res,next) =>{
     const id = req.params.id;
-    const body = req.body;
-    allUsers.updateUsers(body,id)
-    .then(
+    allDoctors.fetchPrivateDoctorById(id)
+    .then(result => {
+     if(result[0].length != 0)
+     {
+
      res.status(200).json({
          success:1,
         
-         message:"Data updated successfully"
-     })
-    
-    
+         data:result[0][0]
+     });
+    }
+    else if(result[0].length == 0)
+    {
+
+        res.status(501).json({
+            success:0,
+           
+            message:"No User Found"
+        });
+       }   
+    }
     )
     
     .catch(err => {
@@ -107,18 +164,52 @@ exports.updateUsersbyId = (req,res,next) =>{
             );
 };
 
-exports.updateDoctor = (req,res,next) =>{
+
+exports.getAppointments = (req,res,next) =>{
+    
+    allDoctors.fetchAppointment()
+    .then(result => {
+        
+     res.status(200).json({
+         success:1,
+         message:result[0]
+     });   
+    }
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};
+
+exports.getAppointmentById = (req,res,next) =>{
     const id = req.params.id;
-    const body = req.body;
-    allUsers.updateDoctor(body,id)
-    .then(
+    allDoctors.fetchAppointmentById(id)
+    .then(result => {
+     if(result[0].length != 0)
+     {
+
      res.status(200).json({
          success:1,
         
-         message:"Data updated successfully"
-     })
-    
-    
+         data:result[0][0]
+     });
+    }
+    else if(result[0].length == 0)
+    {
+
+        res.status(501).json({
+            success:0,
+           
+            message:"No User Found"
+        });
+       }   
+    }
     )
     
     .catch(err => {
@@ -131,58 +222,3 @@ exports.updateDoctor = (req,res,next) =>{
             );
 };
 
-exports.login = (req,res,next) =>{
-    const body = req.body;
-    allUsers.login(body)
-    .then(results => {
-     if(results[0].length !=0)
-     {
-     /*    
-     var obj = JSON.parse(JSON.stringify(results[0]));    
-     console.log(obj[0].Password);
-
-     */
-    
-     const check = compareSync(body.password,results[0][0].password);
-     if(check)
-     {
-     results.password = undefined;      
-     const jsonwebtoken = sign({result:results[0]},process.env.JWT_AUTH,{
-         expiresIn: "24h"
-     });       
-     res.status(200).json({
-         success:1,
-         message:"Login was successful",
-         data:{uid:results[0][0].uid,role:results[0][0].role},
-         token:jsonwebtoken
-
-     })
-     }
-     else if(!check){
-        res.status(501).json({
-            success:0,
-            message:"Invalid Password"
-   
-        })
-
-     }
-    }
-    
-     else if(results[0].length == 0)
-     {
-        res.status(501).json({
-            success:0,
-            message:"Invalid Details"
-        })
-     }   
-    }
-    )
-    .catch(err => {
-        console.log(err);
-        return res.status(501).json({
-            success:0,
-            message:"Database Connection Error"
-        });
-        }
-            );
-};

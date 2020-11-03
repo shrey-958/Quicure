@@ -2,7 +2,7 @@ const { postUsers } = require("../controllers/user.js");
 const { getUsers } = require("../controllers/user.js");
 const { getUsersbyId } = require("../controllers/user.js");
 const { updateUsersbyId } = require("../controllers/user.js");
-
+const { updateDoctor } = require("../controllers/user.js");
 const { login } = require("../controllers/user.js");
 
 
@@ -14,6 +14,7 @@ router.post("/",postUsers);
 
 router.get("/",checkToken,getUsers);
 router.get("/:id",checkToken,getUsersbyId);
+router.put("/doctor/:id",checkToken,updateDoctor);
 router.put("/:id",checkToken,updateUsersbyId);
 
 
