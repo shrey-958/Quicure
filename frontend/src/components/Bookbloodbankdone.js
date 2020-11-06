@@ -1,10 +1,23 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button';
 
-function Bookbloodbankdone(){
+const Bookbloodbankdone = (props) => {
+    const { history } = props;
     return(
-        <div>
-            Congratulations on saving a life! #ThankYou :)
+       
+            <div style={{marginTop:"30vh"}}>
+           <Typography variant="h3"> Congratulations on saving a life! #ThankYou  </Typography>
+
+           <div style={{marginTop:"50px"}}>
+
+           <Button size="large" variant="contained" color="secondary" onClick={ ()=> history.push("/bloodbanks")}>
+                I feel blessed :)
+            </Button>
+
+           </div>
         </div>
+        
     )
 }
 
