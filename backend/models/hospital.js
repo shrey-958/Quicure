@@ -15,7 +15,10 @@ module.exports = class allHospitals {
 
     }
     static hospitalHistoryOfUser(uid){
-        return pool.execute(`SELECT * from BOOK_HOSPITAL WHERE u_id = ?`,[uid]);
+        return pool.execute(`SELECT b.hospid,b.name,a.admitDate,a.dischargeDate,a.reason,a.remarks FROM(
+            SELECT hospid, admitDate,dischargeDate,reason,remarks
+            FROM BOOK_HOSPITAL where uid = ? GROUP BY hospid) a INNER JOIN HOSPITAL b
+            on b.hospid = a.hospid`,[uid]);
 
     }
 }
