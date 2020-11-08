@@ -37,19 +37,19 @@ module.exports = class allUsers {
         [data.fname,data.mname,data.lname,data.email,data.aadharid,data.contactno,data.street,data.city,data.state,data.pincode,data.dob,data.blood_group,data.role,id]);
         
         if(data.isPrivate == 1)
-        return pool.execute(`UPDATE DOCTOR SET degree = ?,specialization = ?,isPrivate = ?,start_dop = ?,work_street= ?,work_city = ?,work_state = ?,work_pincode = ? WHERE uid = ?`,
+        return pool.execute(`UPDATE DOCTOR SET degree = ?,specialization = ?,isPrivate = ?,start_dop = ?,work_street= ?,work_city = ?,work_state = ?,work_pincode = ?, hospital_work_for = NULL WHERE uid = ?`,
         [data.degree,data.specialization,data.isPrivate,data.start_dop,data.work_street,data.work_city,data.work_state,data.work_pincode,id]);
         
 
-        if(data.isPrivate == 0)
-        return pool.execute(`UPDATE DOCTOR SET degree = ?,specialization = ?,isPrivate = ?,start_dop = ?,hospital_work_for = ? WHERE uid = ?`,
+        else if(data.isPrivate == 0)
+        return pool.execute(`UPDATE DOCTOR SET degree = ?,specialization = ?,isPrivate = ?,start_dop = ?,hospital_work_for = (SELECT hospid FROM HOSPITAL WHERE name = ?), work_street = NULL, work_city = NULL, work_state = NULL, work_pincode = NULL WHERE uid = ?`,
         [data.degree,data.specialization,data.isPrivate,data.start_dop,data.hospital_work_for,id]);
         
     }
 
     static login(data){
         
-        return pool.execute(`SELECT uid,role,password FROM USER WHERE email = ?`,[data.email]);
+        return pool.execute(`SELECT uid,role,password,blood_group,fname,lname FROM USER WHERE email = ?`,[data.email]);
     }
    
 }

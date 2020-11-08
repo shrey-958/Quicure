@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
+const axios = require('axios');
 function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -59,14 +61,106 @@ function Login(){
 
     const classes = useStyles();
 
-    const initialData = { email:"", password:""}
-    const [data, setData] = useState(initialData)
+    const [email1,setEmail1] = React.useState('');
+    const [password1,setPassword1] = React.useState('');
+    const [emailValid,setEmailValid] = React.useState(0);
+    const [passValid,setPassValid] = React.useState(0);
+    const [emailTouched,setEmailTouched] = React.useState(0);
+    const [passTouched,setPassTouched] = React.useState(0);
+    const [detailWrong,setDetailWrong] = React.useState('');
+    const [success,setSuccess] = React.useState(0);
+    const [data,setData] = React.useState([]);
 
-    const handleSubmit = (e) => {
-        console.log(data);
-        e.preventDefault();
-    }
 
+    const handleEmailChange = (event) =>{
+        
+      setEmail1(event.target.value);
+      if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email1))
+      {
+          setEmailValid(0);
+      }
+      else
+      {
+          setEmailValid(1);
+      }
+      
+
+  }
+
+  const handleEmailBlur = () =>{
+      
+      setEmailTouched(1);
+   
+  }
+  const handlePassChange = (event) =>{
+      setPassword1(event.target.value);
+      if(password1.length < 8)
+      setPassValid(0);
+      else 
+      setPassValid(1);
+  }
+  const handlePassBlur = () => {
+      setPassTouched(1);
+
+  }
+  const loginHandler = (event) =>{
+      
+      event.preventDefault();
+     
+
+      axios.post('http://localhost:5000/api/users/auth/login',{
+        email:email1,
+        password:password1
+      })  
+      
+      .then(function(response){
+      console.log(response.data);
+
+      if(response.data.success == 1)
+      {  
+      console.log("Login Successful");
+      console.log(response.data.data);
+      var auth = response.data.token;
+      localStorage.setItem("token",auth);
+      localStorage.setItem("status",1);
+      localStorage.setItem("uid",response.data.data.uid);
+      localStorage.setItem("role",response.data.data.role);
+      localStorage.setItem("fname",response.data.data.fname);
+      localStorage.setItem("lname",response.data.data.lname);
+      localStorage.setItem("blood_group",response.data.data.blood_group);
+      console.log(localStorage.getItem("status"));
+      if(!localStorage.getItem("token"))
+      {
+        setDetailWrong("The Email and Password entered dont match!");
+      }
+   
+      else
+      {
+        setDetailWrong("");
+        window.location.reload();
+      }
+     
+     
+
+      }
+      else if(response.data.success == 0)
+      {
+        localStorage.setItem("status",0);
+        setDetailWrong("The Email and Password entered dont match!");
+        console.log(localStorage.getItem("status"));
+      }
+
+      
+      }).catch(function (error) {
+          console.log("Invalid Request");
+          setDetailWrong("User Not Found!");
+        });
+     
+    
+    
+      
+  
+  }
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -79,7 +173,7 @@ function Login(){
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit = {loginHandler}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -88,10 +182,15 @@ function Login(){
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
+              value = {email1}
+              autoComplete="off"
               autoFocus
-              onChange = {e => setData({...data, email : e.target.value})}
+              
+              onBlur = {handleEmailBlur}
+              onChange = {handleEmailChange}
             />
+            {emailTouched === 0 ? <p></p> : (email1.length > 0 && emailValid === 1 ? <p></p>:<p style = {{color:"red"}}>Please enter a valid email id!</p>)}
+             
             <TextField
               variant="outlined"
               margin="normal"
@@ -101,26 +200,33 @@ function Login(){
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
-              onChange = {e => setData({...data, password : e.target.value})}
+              value = {password1}
+              autoComplete="off"
+              
+              onBlur = {handlePassBlur}
+              onChange = {handlePassChange}
             />
+            {passTouched === 0 ? <p></p> : (password1.length > 0 && passValid === 1 ? <p></p>:<p style = {{color:"red"}}>Please enter a valid password!</p>)}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
             
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick = {handleSubmit}
-            >
-              Sign In
-            </Button>
+            
+          >
+            Submit
+          </Button>
+          <p  style = {{color:"red"}}> {detailWrong}</p>   
+            
+            
             <Grid container>
               
               <Grid item>
               Don't have an account?&nbsp;
-                <Link href="/register" variant="body1">
-                  {"Register"}
+  <Link onMouseDown={event =>  window.location.href='/register'} >
+                  Register
                 </Link>
               </Grid>
             </Grid>

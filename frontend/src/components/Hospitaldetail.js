@@ -5,33 +5,72 @@ import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
+import {useParams} from 'react-router-dom';
+const axios = require("axios");
 function Hospitaldetail(){
     const today = new Date().toISOString().slice(0, 10);
     const inithospData = {hospid:"",name:"",email:"",city:"",state:"",pincode:"",street:"",nbeds:0,contactno:""}//initalize with proper hospid
     const initBook = {uid:"2",hospid:"4",reason:"", admitDate : today};//initialise with proper uid and hospid
     const [hospData, changehospData]=useState(inithospData);
     const [bookBed, changebookBed] = useState(initBook);
-    useEffect(()=>{
-        //get hosp values from db
-       changehospData(prevState => ({hospid:"2",name:"Lilavati",email:"lila@gmail.com",city:"mumbai",state:"mah",pincode:"400106",street:"mg road",nbeds:5,contactno:"9897456126"}))
-    /*
-    //SAMPLE
-    useEffect(function effectFunction() {
-       fetch('https://the-fake-harry-potter-api.com/books')
-           .then(response => response.json())
-           .then(({ data: books }) => {
-               updateBooks(books);
-           });
-   }, []);*/
 
-    },[])
+    const params = useParams();
+       React.useEffect(() => {
+        
+        axios.get(`http://localhost:5000/api/hospital/${params.hospid}`)    
+         
+        
+        
+        .then(function(response){
+        console.log(response.data.data); 
+        changehospData(prevState => ({hospid:response.data.data.hospid,
+            name:response.data.data.name,
+            email:response.data.data.email,
+            city:response.data.data.city,
+            state:response.data.data.state,
+            pincode:response.data.data.pincode,
+            street:response.data.data.street,
+            nbeds:response.data.data.nbeds,
+            contactno:response.data.data.contactno})) 
+
+        
+        
+        
+        }).catch(function (error) {
+            console.log("Invalid Request");
+          });
+       
+        
+       
+      },[]);    
+
+  
 
     const bookBedFunction = () =>{
         console.log(bookBed)
-       //update request for hospData with number of hospital -1
-       //post request for bookbed data
-       // if all done, redirect to /hospital/book page
+        axios.post(`http://localhost:5000/api/hospital/book/${params.hospid}`,{
+            newBeds:(hospData.nbeds-1),
+            u_id:localStorage.getItem("uid"),
+            admitDate:today,
+            dischargeDate:0,
+            cause:bookBed.reason,
+            remarks:"",
+            
+            
+           
+        }).then(function(response){
+
+          if(response.data.success === 1)
+          {
+          console.log('Data posted successfully');
+          window.location.href='/hospital/book';
+          }
+          
+            
+            
+            }).catch(function (error) {
+                console.log("Invalid Post Request");
+              });
     }
         return(
         <div>

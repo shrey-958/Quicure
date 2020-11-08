@@ -7,27 +7,67 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import {useParams} from 'react-router-dom';
+const axios = require("axios");
 
 function Bloodbankdetail(){
     const initBook = {uid:"2",bbid:"4",blood_group:"A+ve",nunits:1};//initialise with proper uid , bbid and bloodgroup
     const initbbData = {bbid:"",name:"",email:"",city:"",state:"",pincode:"",street:"",contactno:""}//initalize with proper bbid
     const [bbData, changebbData] = useState(initbbData)
-    useEffect(()=>{
-         //get bb values from db
-       /*
-       //SAMPLE
-       useEffect(function effectFunction() {
-          fetch('https://the-fake-harry-potter-api.com/books')
-              .then(response => response.json())
-              .then(({ data: books }) => {
-                  updateBooks(books);
-              });
-      }, []);*/
+    
+    const params = useParams();
+    React.useEffect(() => {
+        
+        axios.get(`http://localhost:5000/api/bloodbank/${params.bbid}`)    
+         
+        
+        
+        .then(function(response){
+        console.log(response.data.data); 
+        
+        changebbData(prevState => ({bbid:response.data.data.bbid,
+            name:response.data.data.name,
+            email:response.data.data.email,
+            city:response.data.data.city,
+            state:response.data.data.state,
+            pincode:response.data.data.pincode,
+            street:response.data.data.street,
+            contactno:response.data.data.contactno})) 
 
-    },[])
+        
+        
+        
+        }).catch(function (error) {
+            console.log("Invalid Request");
+          });
+       
+        
+       
+      },[]);    
     const donateBloodFunction = () => {
-        //Push initBook, if success, then redirect to /bloodbank/book page
+        axios.post(`http://localhost:5000/api/bloodbank/book/${params.bbid}`,{
+            
+            uid:localStorage.getItem("uid"),
+            blood_group:localStorage.getItem("blood_group"),
+            nunits:1
+            
+            
+           
+        }).then(function(response){
+
+          if(response.data.success === 1)
+          {
+          console.log('Data posted successfully');
+          window.location.href='/bloodbank/book';
+          }
+          
+            
+            
+            }).catch(function (error) {
+                console.log("Invalid Post Request");
+              });
     }
+    
     return(
         <div>
             <Link href="/bloodbanks"><Typography align="left" variant = 'h5'>Back to bloodbanks page</Typography></Link>

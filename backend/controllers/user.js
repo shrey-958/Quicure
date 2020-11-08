@@ -153,7 +153,7 @@ exports.login = (req,res,next) =>{
      res.status(200).json({
          success:1,
          message:"Login was successful",
-         data:{uid:results[0][0].uid,role:results[0][0].role},
+         data:{uid:results[0][0].uid,role:results[0][0].role,blood_group:results[0][0].blood_group,fname:results[0][0].fname,lname:results[0][0].lname},
          token:jsonwebtoken
 
      })

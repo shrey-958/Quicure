@@ -1,4 +1,4 @@
-const { getAllDoctors, getDoctorById, getPrivateDoctors, getPrivateDoctorById, getAppointments, getAppointmentById, updateAppointmentById } = require("../controllers/doctor.js");
+const { getAllDoctors, getDoctorById, getPrivateDoctors, getPrivateDoctorById, getAppointments, getAppointmentById, updateAppointmentById, getAppointmentHistoryById } = require("../controllers/doctor.js");
 
 
 
@@ -17,8 +17,9 @@ router.get("/private",checkToken,getPrivateDoctors);
 router.get("/private/:id",checkToken,getPrivateDoctorById);
 router.get("/appointments",checkToken,getAppointments);
 router.get("/appointments/:id",checkToken,getAppointmentById);
-router.post("/book/appointments",checkToken,postAppointment);
-router.put("/appointments/:id",checkToken,updateAppointmentById);
+router.get("/appointments/history/:id",checkToken,getAppointmentHistoryById);
+router.post("/book/appointments",postAppointment);
+router.put("/appointments/:id",updateAppointmentById);
 
 /*
 router.get("/pridoc",getPrivateDoctors);

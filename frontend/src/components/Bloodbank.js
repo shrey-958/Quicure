@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
-
+const axios = require("axios");
 const useStyles = makeStyles((theme) => ({
   container: {
     //display: "flex"
@@ -15,55 +15,64 @@ const useStyles = makeStyles((theme) => ({
 function Bloodbank(){
     const classes = useStyles();
     //FETCH DATA USING USEEFFECT IN THE FORMAT GIVEN BELOW
-    const data = [{
-        bbid : 1,
-        name : "Health Bloodbank",
-        city:"gfgfgre",
-        state : "hfjsdf",
-        contactno : "9865234512"
-    },{
-        bbid : 6,
-        name : "Jio Bloodbank",
-        city: "dfgsd",
-        state : "hfjsdfdsfsdf",
-        contactno : "7878456236"
-    },{
-        bbid : 5,
-        name : "Newlife Bloodbank",
-        city: "fdsgsdfg",
-        state : "erewrwerf",
-        contactno : "7884156712"
-    }]
+    const [data,setData] = React.useState([]);
+    React.useEffect(() => {
+        
+        axios.get("http://localhost:5000/api/bloodbank/all")    
+         
+        
+        
+        .then(function(response){
+        console.log(response.data.message); 
+        setData(response.data.message); 
+
+        
+        
+        
+        }).catch(function (error) {
+            console.log("Invalid Request");
+          });
+       
+        
+       
+      },[]);
+
+
+
     return(
         <div className={classes.container}>
         <Drawer />
+        <br />
             <Typography
-            align = 'centre'
-            variant = 'h4'
+            align = 'center'
+            variant = 'h3'
+            style = {{paddingTop:75}}
             > 
-            Bloodbank List
+            BLOODBANK LIST
             </Typography>
+            <Divider />
             <br />
-            <Grid container spacing={3}>
-        <Grid item xs={1}>
+            <br />
+            <Grid container spacing={3}  >
+        <Grid item xs={2}>
         </Grid>
 
         <Grid item xs={1}>
-          
-        </Grid>
-        <Grid item xs={3}>
-         <Typography variant='h6'>Bloodbank</Typography>
+       
         </Grid>
         <Grid item xs={2}>
-        <Typography variant='h6'>City</Typography>
+         <Typography variant='h6'><u>Bloodbank</u></Typography>
         </Grid>
         <Grid item xs={2}>
-        <Typography variant='h6'>State</Typography>
+        <Typography variant='h6'><u>City</u></Typography>
         </Grid>
         <Grid item xs={2}>
-          <Typography variant='h6'>Contact</Typography>
+        <Typography variant='h6'><u>State</u></Typography>
         </Grid>
         <Grid item xs={1}>
+          <Typography variant='h6'><u>Contact</u></Typography>
+        </Grid>
+        <Grid item xs={0}>
           
         </Grid>
 
@@ -77,14 +86,14 @@ function Bloodbank(){
                   <div>
             <br />
 
-                <Grid container spacing={3}>
-                <Grid item xs={1}>
+                <Grid container spacing={3}  >
+                <Grid item xs={2}>
                 </Grid>
 
                 <Grid item xs={1}>
                 <Typography>{i+1}</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                 <Link href={`/bloodbank/${currBb.bbid}`}>  <Typography>{currBb.name}</Typography> </Link>
                 </Grid>
                 <Grid item xs={2}>
@@ -93,10 +102,10 @@ function Bloodbank(){
                 <Grid item xs={2}>
                 <Typography>{currBb.state}</Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={1}>
                     <Typography>{currBb.contactno}</Typography>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={0}>
                     
                 </Grid>
 

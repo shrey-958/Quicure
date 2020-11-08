@@ -14,8 +14,8 @@ router.post("/",postUsers);
 
 router.get("/",checkToken,getUsers);
 router.get("/:id",checkToken,getUsersbyId);
-router.put("/doctor/:id",checkToken,updateDoctor);
-router.put("/:id",checkToken,updateUsersbyId);
+router.put("/doctor/:id",updateDoctor);
+router.put("/:id",updateUsersbyId);
 
 
 router.post("/auth/login",login);

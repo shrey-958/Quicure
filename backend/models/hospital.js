@@ -11,7 +11,7 @@ module.exports = class allHospitals {
     }
     static bookHospitalBed(data,hospid){
         pool.execute(`UPDATE HOSPITAL SET nbeds = ? WHERE hospid = ?`,[data.newBeds,hospid]);
-        return pool.execute(`INSERT INTO BOOK_HOSPITAL (hosp_id, u_id, admitDate, dischargeDate, cause, remarks) VALUES (?,?,?,?,?,?)`,[hospid,data.u_id,data.admitDate,data.dischargeDate,data.cause,data.remarks]);
+        return pool.execute(`INSERT INTO BOOK_HOSPITAL (hospid, uid, admitDate, dischargeDate, reason, remarks) VALUES (?,?,?,?,?,?)`,[hospid,data.u_id,data.admitDate,data.dischargeDate,data.cause,data.remarks]);
 
     }
     static hospitalHistoryOfUser(uid){

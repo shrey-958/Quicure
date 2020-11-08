@@ -36,12 +36,21 @@ module.exports = class allDoctors {
         ,[id]);
     }
 
-    static fetchAppointment(){
-        return pool.execute(`SELECT * FROM appointment`);
+    static fetchAppointment(date){
+        return pool.execute("SELECT * FROM appointment WHERE doa >= ? ORDER BY doa",[date]);
     }
-    static fetchAppointmentById(id){
-        return pool.execute(`SELECT * FROM appointment WHERE aid = ?`,[id]);
+    static fetchAppointmentById(id,date){
+        return pool.execute(`SELECT * FROM APPOINTMENT WHERE d_uid = ? AND doa>=? ORDER BY doa`,[id,date]);
+
+
     }
+    static fetchAppointmenHistoryById(id,date){
+        return pool.execute(`SELECT * FROM APPOINTMENT WHERE d_uid = ? AND doa<=? ORDER BY doa`,[id,date]);
+
+
+    }
+    
+
 
    
 

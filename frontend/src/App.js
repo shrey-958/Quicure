@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react';
 import Login from './components/Login'
 import Register from './components/Register'
 import Home from './components/Home'
@@ -13,16 +14,30 @@ import Doctordetail from './components/Doctordetail'
 import Bookdoctordone from './components/Bookdoctordone'
 import History from './components/History'
 import Appointment from './components/Appointment'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route,Redirect} from 'react-router-dom'
+
 
 function App() {
+ 
+  
+
+
+  const [login,setLogin] = React.useState(0);
+  
+  
+
   return (
-    <Router>
-    <div className="App">
     
-    <Switch>
-      <Route path="/" component={Login} exact />
-      <Route path="/register" component={Register} exact />
+      
+
+       
+    <Router>
+   
+
+  
+      {localStorage.getItem("token")?
+      <Switch>
+      
       <Route path="/home/:uid" component={Home} exact />
       <Route path="/hospital/book" component={Bookhospitaldone} exact />
       <Route path="/bloodbank/book" component={Bookbloodbankdone} exact />
@@ -34,17 +49,21 @@ function App() {
       <Route path="/doctor/book" component={Bookdoctordone} exact />
       <Route path="/doctor/:uid" component={Doctordetail} exact />
       <Route path="/history/:uid" component={History} exact />
-      <Route path="/appointments/:uid" component={Appointment} exact />
-
+      <Route path="/appointments" component={Appointment} exact />
+      <Redirect from = '/' to = {`/home/${localStorage.getItem("uid")}`} component = {Register} />
       
 
+      </Switch>:
+      <Switch>
+      <Route path="/register" component={Register}  />
+      <Route path="/login" component={Login} exact/>
       
-
-    </Switch>
-  
+      <Redirect from = '/' to = '/login' component = {Login} />
       
-    </div>
-    </Router>
+        
+      </Switch>}
+      </Router>
+      
   );
 }
 

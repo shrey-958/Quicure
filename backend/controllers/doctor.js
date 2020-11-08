@@ -167,7 +167,10 @@ exports.getPrivateDoctorById = (req,res,next) =>{
 
 exports.getAppointments = (req,res,next) =>{
     
-    allDoctors.fetchAppointment()
+    var date = new Date();
+    date = date.toJSON().slice(0,10);
+    allDoctors.fetchAppointment(date)
+
     .then(result => {
         
      res.status(200).json({
@@ -188,8 +191,10 @@ exports.getAppointments = (req,res,next) =>{
 };
 
 exports.getAppointmentById = (req,res,next) =>{
+    var date = new Date();
+    date = date.toJSON().slice(0,10);
     const id = req.params.id;
-    allDoctors.fetchAppointmentById(id)
+    allDoctors.fetchAppointmentById(id,date)
     .then(result => {
      if(result[0].length != 0)
      {
@@ -197,7 +202,7 @@ exports.getAppointmentById = (req,res,next) =>{
      res.status(200).json({
          success:1,
         
-         data:result[0][0]
+         data:result[0] 
      });
     }
     else if(result[0].length == 0)
@@ -222,3 +227,39 @@ exports.getAppointmentById = (req,res,next) =>{
             );
 };
 
+exports.getAppointmentHistoryById = (req,res,next) =>{
+    var date = new Date();
+    date = date.toJSON().slice(0,10);
+    const id = req.params.id;
+    allDoctors.fetchAppointmenHistoryById(id,date)
+    .then(result => {
+     if(result[0].length != 0)
+     {
+
+     res.status(200).json({
+         success:1,
+        
+         data:result[0] 
+     });
+    }
+    else if(result[0].length == 0)
+    {
+
+        res.status(501).json({
+            success:0,
+           
+            message:"No User Found"
+        });
+       }   
+    }
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};

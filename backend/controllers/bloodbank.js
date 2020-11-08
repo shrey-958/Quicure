@@ -62,3 +62,38 @@ exports.bloodbankHistoryOfUser=(req,res,next)=>{
         });
         })
 }
+
+exports.getBBbyId = (req,res,next) =>{
+    const id = req.params.id;
+    allBloodbanks.fetchBBbyId(id)
+    .then(result => {
+     if(result[0].length != 0)
+     {
+
+     res.status(200).json({
+         success:1,
+        
+         data:result[0][0]
+     });
+    }
+    else if(result[0].length == 0)
+    {
+
+        res.status(501).json({
+            success:0,
+           
+            message:"No Blood Bank Found"
+        });
+       }   
+    }
+    )
+    
+    .catch(err => {
+        console.log(err);
+        return res.status(501).json({
+            success:0,
+            message:"Database Connection Error"
+        });
+        }
+            );
+};

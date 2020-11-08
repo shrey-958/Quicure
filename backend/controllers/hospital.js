@@ -93,7 +93,7 @@ exports.hospitalHistoryOfUser = (req,res,next)=>{
      res.status(200).json({
          success:1,
         
-         data:result[0][0]
+         data:result[0]
      });
     }
     else if(result[0].length == 0)

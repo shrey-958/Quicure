@@ -19,6 +19,11 @@ module.exports = class allBloodbanks {
         
     }
 
+    static fetchBBbyId(id){
+        
+        return pool.execute(`SELECT * FROM blood_bank WHERE bbid = ?`,[id]);
+    }
+
 
 
 
