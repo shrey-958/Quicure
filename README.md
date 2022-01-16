@@ -1,4 +1,4 @@
-# Quicure
+# **Quicure**
 
 ### Abstract
 
@@ -26,63 +26,63 @@ The core functionality consists of providing the users a platform to connect wit
 
 ### Implementation Screenshots
 
-##### Login
+#### Login
 
 ![](images/login.png)
 
-##### Register
+#### Register
 
 ![](images/register.png)
 
-##### Home
+#### Home
 
 ![](images/home.png)
 
-##### All Hospitals
+#### All Hospitals
 
 ![](images/all-hospital.png)
 
-##### Hospital Bed Booking
+#### Hospital Bed Booking
 
 ![](images/book-bed.png)
 
-##### Hospital Booking Confirmation
+#### Hospital Booking Confirmation
 
 ![](images/booking-confirm.png)
 
-##### All Bloodbanks
+#### All Bloodbanks
 
 ![](images/all-bloodbanks.png)
 
-##### Donate Blood Page
+#### Donate Blood Page
 
 ![](images/donate-blood.png)
 
-##### Blood donation confirmation
+#### Blood donation confirmation
 
 ![](images/donate-blood-confirm.png)
 
-##### Doctors privately practising
+#### Doctors privately practising
 
 ![](images/private-doctors.png)
 
-##### Appointment booking
+#### Appointment booking
 
 ![](images/book-doc-appt.png)
 
-##### Appointment booking confirmation
+#### Appointment booking confirmation
 
 ![](images/appt-confirm.png)
 
-##### All appointments
+#### All appointments
 
 ![](images/all-appt.png)
 
-##### History Feature
+#### History Feature
 
 ![](images/history.png)
 
-##### Regular User/Patient dashboard
+#### Regular User/Patient dashboard
 
 ![](images/pat-dash.png)
 
